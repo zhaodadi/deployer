@@ -5,6 +5,8 @@
  * file that was distributed with this source code.
  */
 
+$Release_Path;
+
 /**
  * Common parameters.
  */
@@ -145,7 +147,8 @@ task('deploy:prepare', function () {
  * Return release path.
  */
 env('release_path', function () {
-    return str_replace("\n", '', run("readlink {{deploy_path}}/release"));
+    global $Release_Path;
+    return str_replace("\n", '', $Release_Path);
 });
 
 /**
@@ -164,6 +167,9 @@ task('deploy:release', function () {
     run("cd {{deploy_path}} && if [ -h release ]; then rm release; fi");
 
     run("ln -s $releasePath {{deploy_path}}/release");
+    global $Release_Path;
+
+    $Release_Path = $releasePath;
 })->desc('Prepare release');
 
 
